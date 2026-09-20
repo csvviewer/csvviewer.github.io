@@ -1,38 +1,38 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CsvViewer } from "@/components/csv/CsvViewer";
-import { CsvArticle } from "@/components/csv/CsvArticle";
+import { HomePageContent } from "@/components/csv/HomePageContent";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
-        title: "CSV Viewer & Editor Online — Fast, In-Browser CSV & TSV Tool",
+        title: "CSV Viewer & Editor — View, Edit, and Manage CSV Files Online",
       },
       {
         name: "description",
         content:
-          "Free online CSV viewer and editor. Open, view, search, sort, and filter large CSV & TSV files (100k+ rows) in your browser. 100% private, zero server uploads.",
+          "Open, view, and edit CSV files directly in your browser — no software to install, no account required. Supports comma, semicolon, tab, and pipe delimiters.",
       },
       {
         property: "og:title",
-        content: "CSV Viewer & Editor Online — Fast, In-Browser CSV & TSV Tool",
+        content: "CSV Viewer & Editor — View, Edit, and Manage CSV Files Online",
       },
       {
         property: "og:description",
         content:
-          "Open, view, edit, search, and filter large CSV & TSV files directly in your browser with zero lag. 100% private with no server uploads.",
+          "Open, view, and edit CSV files directly in your browser — no software to install, no account required. Supports comma, semicolon, tab, and pipe delimiters.",
       },
       { property: "og:url", content: "https://csvviewer.github.io/" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       {
         name: "twitter:title",
-        content: "CSV Viewer & Editor Online — Fast, In-Browser CSV & TSV Tool",
+        content: "CSV Viewer & Editor — View, Edit, and Manage CSV Files Online",
       },
       {
         name: "twitter:description",
         content:
-          "Free online CSV viewer and editor. Open, search, sort, and filter CSV files with zero lag. 100% in-browser, no uploads.",
+          "Open, view, and edit CSV files directly in your browser — no software to install, no account required.",
       },
     ],
     links: [
@@ -47,11 +47,24 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="w-full space-y-12">
+    <div className="w-full space-y-8">
+      <div className="space-y-3 max-w-4xl mx-auto pt-2">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
+          CSV Viewer &amp; Editor — View, Edit, and Manage CSV Files Online
+        </h1>
+        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+          Open, view, and edit CSV files directly in your browser — no software to install, no
+          account required. Upload a .csv file below to see it rendered as an editable table, or
+          paste your data straight in. The tool supports comma, semicolon, tab, and pipe-delimited
+          files, and everything you edit can be downloaded as a clean CSV file when you're done.
+        </p>
+      </div>
+
       <div id="viewer">
         <CsvViewer />
       </div>
-      <CsvArticle />
+
+      <HomePageContent />
     </div>
   );
 }

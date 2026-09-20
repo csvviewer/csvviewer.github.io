@@ -345,66 +345,13 @@ export function CsvViewer() {
 
   if (!active) {
     return (
-      <div className="mx-auto w-full max-w-3xl space-y-8 py-4">
-        <div className="text-center space-y-1.5">
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-            Fast, in-browser CSV viewer
-          </h1>
-          <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-            View, search, filter, and edit large CSV files with instant zero-lag virtualized
-            scrolling. Your files never leave your computer.
-          </p>
-        </div>
-
+      <div className="mx-auto w-full max-w-4xl">
         <DropZone
           onFiles={handleFiles}
           onText={handleText}
           onUrl={handleUrl}
           onSample={() => handleText(sampleCsv, "sample-orders.csv")}
         />
-
-        {/* Value line & feature strip below the fold */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-4 border-t border-border">
-          <div className="rounded-lg border border-border bg-card p-3.5 space-y-1">
-            <div className="flex items-center gap-2 text-foreground font-semibold text-xs">
-              <Zap className="size-4 text-primary shrink-0" />
-              <span>Virtualized Grid</span>
-            </div>
-            <p className="text-[12px] text-muted-foreground leading-relaxed">
-              Renders 100k+ rows smoothly at 60fps without browser lockup.
-            </p>
-          </div>
-
-          <div className="rounded-lg border border-border bg-card p-3.5 space-y-1">
-            <div className="flex items-center gap-2 text-foreground font-semibold text-xs">
-              <ShieldCheck className="size-4 text-primary shrink-0" />
-              <span>100% Client-Side</span>
-            </div>
-            <p className="text-[12px] text-muted-foreground leading-relaxed">
-              Zero server uploads, zero trackers. Your data remains strictly local.
-            </p>
-          </div>
-
-          <div className="rounded-lg border border-border bg-card p-3.5 space-y-1">
-            <div className="flex items-center gap-2 text-foreground font-semibold text-xs">
-              <Search className="size-4 text-primary shrink-0" />
-              <span>Deep Search & Filters</span>
-            </div>
-            <p className="text-[12px] text-muted-foreground leading-relaxed">
-              Instant match highlights, per-column filters, and numeric-aware sorting.
-            </p>
-          </div>
-
-          <div className="rounded-lg border border-border bg-card p-3.5 space-y-1">
-            <div className="flex items-center gap-2 text-foreground font-semibold text-xs">
-              <FileDown className="size-4 text-primary shrink-0" />
-              <span>Edit & Multi-Export</span>
-            </div>
-            <p className="text-[12px] text-muted-foreground leading-relaxed">
-              In-place cell edits with undo. Export to CSV, TSV, JSON, Markdown, or clipboard.
-            </p>
-          </div>
-        </div>
       </div>
     );
   }

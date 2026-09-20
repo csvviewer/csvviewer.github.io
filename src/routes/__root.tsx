@@ -83,35 +83,35 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       {
-        title: "CSV Viewer & Editor Online — Fast, In-Browser CSV & TSV Tool",
+        title: "CSV Viewer & Editor — View, Edit, and Manage CSV Files Online",
       },
       {
         name: "description",
         content:
-          "Free online CSV viewer and editor. Open, view, search, sort, and filter large CSV & TSV files (100k+ rows) in your browser. 100% private, zero server uploads.",
+          "Open, view, and edit CSV files directly in your browser — no software to install, no account required. Upload a .csv file to see it rendered as an editable table, or paste your data straight in.",
       },
       { name: "author", content: "CSV Viewer" },
       {
         property: "og:title",
-        content: "CSV Viewer & Editor Online — Fast, In-Browser CSV & TSV Tool",
+        content: "CSV Viewer & Editor — View, Edit, and Manage CSV Files Online",
       },
       {
         property: "og:description",
         content:
-          "Free online CSV viewer and editor. Open, view, search, sort, filter, and edit large CSV & TSV files directly in your browser with zero lag. 100% private.",
+          "Open, view, and edit CSV files directly in your browser — no software to install, no account required. Supports comma, semicolon, tab, and pipe-delimited files.",
       },
       { property: "og:url", content: "https://csvviewer.github.io/" },
       { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "CSV Viewer & Editor Online" },
+      { property: "og:site_name", content: "CSV Viewer & Editor" },
       { name: "twitter:card", content: "summary_large_image" },
       {
         name: "twitter:title",
-        content: "CSV Viewer & Editor Online — Fast, In-Browser CSV & TSV Tool",
+        content: "CSV Viewer & Editor — View, Edit, and Manage CSV Files Online",
       },
       {
         name: "twitter:description",
         content:
-          "Open, view, search, sort, filter, and edit large CSV & TSV files directly in your browser with zero lag. 100% in-browser, no uploads.",
+          "Open, view, and edit CSV files directly in your browser — no software to install, no account required.",
       },
     ],
     links: [
@@ -277,7 +277,7 @@ function RootComponent() {
                   href="#guide"
                   className="rounded-md px-2.5 py-1.5 font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-secondary/60"
                 >
-                  Features & Guide
+                  Guide
                 </a>
                 <a
                   href="#faq"
@@ -314,16 +314,14 @@ function RootComponent() {
           <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6">
             <div className="flex items-center gap-2">
               <Shield className="size-3.5 text-emerald-500" />
-              <span>
-                CSV Viewer & Editor Online — 100% Client-Side. Files never leave your device.
-              </span>
+              <span>CSV Viewer & Editor — 100% Client-Side. Files never leave your device.</span>
             </div>
             <div className="flex items-center gap-4">
               <a href="#viewer" className="hover:text-foreground transition-colors">
                 Viewer
               </a>
               <a href="#guide" className="hover:text-foreground transition-colors">
-                Features & Guide
+                Guide
               </a>
               <a href="#faq" className="hover:text-foreground transition-colors">
                 FAQ

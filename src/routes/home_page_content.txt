@@ -1,0 +1,522 @@
+================================================================================
+CSV VIEWER & EDITOR — HOMEPAGE CONTENT
+================================================================================
+(Content follows the H1–H3 architecture from the semantic SEO brief.
+ [Tool] marks where the embedded tool interface sits in the layout.)
+================================================================================
+
+
+H1: CSV Viewer & Editor — View, Edit, and Manage CSV Files Online
+
+Open, view, and edit CSV files directly in your browser — no software to
+install, no account required. Upload a .csv file below to see it rendered
+as an editable table, or paste your data straight in. The tool supports
+comma, semicolon, tab, and pipe-delimited files, and everything you edit
+can be downloaded as a clean CSV file when you're done.
+
+[Tool: upload / paste-in area + live table view]
+
+
+--------------------------------------------------------------------------------
+H2: What Is a CSV File?
+--------------------------------------------------------------------------------
+
+A CSV file — short for Comma-Separated Values — is a plain text file that
+stores tabular data. Instead of the rows and columns being drawn visually,
+like in a spreadsheet program, each row of data is written as a single
+line of text, and each value in that row is separated by a comma. Open a
+CSV file in a plain text editor and you'll see something like this:
+
+  name,email,city
+  Sarah Khan,sarah@example.com,Dhaka
+  Tom Reyes,tom@example.com,Manila
+
+The first line is usually a header row — it names each column so the data
+that follows can be understood. Every line after that is a record: one
+row of related values, in the same order as the header.
+
+Because a CSV file is plain text, it can be opened, read, and edited by
+almost any program, on any operating system, without depending on a
+specific piece of software. That's also exactly why a browser-based CSV
+viewer works so well: the browser only needs to read the text, split it
+by its delimiter, and lay it out as a table.
+
+H3: CSV File Structure (Rows, Columns, Fields)
+
+A CSV file is built from three basic units:
+
+- A row is one complete line of data — one record, such as one person,
+  one order, or one product.
+- A column is a category of data that runs down the file — the same
+  position in every row, such as "email" or "city."
+- A field (or cell) is a single value: the intersection of one row and
+  one column, like "sarah@example.com."
+
+The header row defines what each column represents. If a CSV file has no
+header row, the first line is just data like any other, and column
+meaning has to be inferred from position or context.
+
+H3: Common Delimiters (Comma, Semicolon, Tab, Pipe)
+
+The comma is the default delimiter in a CSV file, but it isn't the only
+one used in practice. Depending on the software or region a file came
+from, you may also see:
+
+- Semicolon (;) — common in regions where the comma is already used as a
+  decimal separator
+- Tab — often used in files exported with a .tsv extension, but
+  functionally similar to CSV
+- Pipe (|) — sometimes used when the data itself frequently contains
+  commas, to avoid extra escaping
+
+A CSV viewer needs to correctly identify which delimiter a file is using;
+guessing wrong is one of the most common reasons a file looks broken when
+opened (more on this in the formatting section below).
+
+H3: CSV vs Excel (XLSX) — Key Differences
+
+CSV and Excel's native format (XLSX) are often used for the same kind of
+data, but they are structurally very different:
+
+- CSV is plain text. It stores only raw values — no fonts, colors,
+  formulas, multiple sheets, or cell formatting.
+- XLSX is a binary/compressed format. It can store formulas, multiple
+  sheets, formatting, charts, and metadata alongside the data.
+
+This difference matters in practice: a CSV file has no concept of "bold"
+or "currency formatting," and it can only ever contain one sheet of data.
+When you export or download from a CSV editor, you're getting the raw
+values only — which is often exactly what's needed for imports, data
+transfers, and system-to-system exchanges.
+
+H3: CSV vs TSV and Other Delimited Formats
+
+TSV (Tab-Separated Values) is structurally identical to CSV — rows of
+plain text data — except fields are separated by a tab character instead
+of a comma. TSV is sometimes preferred for data that naturally contains a
+lot of commas (like descriptions or addresses), since it avoids the need
+to quote every field. A CSV viewer that also handles tab-delimited files
+can open both formats without any extra steps.
+
+
+--------------------------------------------------------------------------------
+H2: How to View a CSV File Online
+--------------------------------------------------------------------------------
+
+Viewing a CSV file online means letting your browser do what a
+spreadsheet program would normally do: read the raw text, split it into
+rows and columns, and display it as a table you can actually read.
+
+H3: Uploading or Importing Your CSV File
+
+To view a file, upload it from your device or paste its raw contents
+directly into the tool. There's no need to know the file's delimiter or
+encoding in advance — the viewer detects the structure automatically and
+renders the table immediately. Nothing about viewing a file requires
+Excel, Google Sheets, or any other spreadsheet software to be installed.
+
+H3: Reading the Table View (Rows, Columns, Headers)
+
+Once a file is loaded, it's displayed as a standard table: the first row
+(if your file has one) becomes the column headers, and every line after
+that becomes a row of data beneath it. You can scroll through the table
+the same way you would in a spreadsheet, with each cell showing exactly
+the value stored in that position in the original file — no reformatting
+or reinterpretation of the underlying data.
+
+H3: Viewing Large CSV Files in the Browser
+
+Browser-based rendering has to balance file size against performance.
+Smaller and mid-sized CSV files (a few thousand rows) load and scroll
+instantly. As files grow into the tens of thousands of rows, rendering
+every cell at once becomes slower, so larger files are loaded and
+displayed progressively to keep the table responsive rather than
+freezing the page. If you're working with an especially large export —
+for example, a full database dump — expect the initial load to take a
+little longer while the table builds.
+
+
+--------------------------------------------------------------------------------
+H2: How to Edit a CSV File Online
+--------------------------------------------------------------------------------
+
+Viewing shows you the data; editing lets you change it. This tool
+supports full in-place editing of the table it renders, so you can
+correct, update, or restructure your data without switching to another
+program.
+
+H3: Editing Cell Values
+
+Click into any cell to edit its value directly, the same way you would
+in a spreadsheet. Changes are reflected instantly in the table, and the
+underlying data structure — which row, which column — stays intact
+unless you explicitly change it. This makes it straightforward to fix a
+typo, correct a price, or update a status across individual records
+without touching anything else in the file.
+
+H3: Adding and Deleting Rows or Columns
+
+Beyond individual cells, you can restructure the table itself:
+
+- Add a row to insert a new record into the dataset
+- Delete a row to remove a record entirely
+- Add a column to introduce a new field across every row
+- Delete a column to remove a field you no longer need
+
+These operations apply to the whole table at once — adding a column, for
+instance, creates an empty field in that position for every existing
+row, keeping the structure consistent.
+
+H3: Saving and Downloading Your Edited CSV
+
+Once your edits are complete, download the result as a standard .csv
+file. The exported file follows the same plain-text, comma-separated
+structure as the original — so it opens correctly in Excel, Google
+Sheets, database import tools, or any other program that reads CSV,
+without requiring any extra conversion step.
+
+
+--------------------------------------------------------------------------------
+H2: Working With Your Data (Search, Sort, and Filter)
+--------------------------------------------------------------------------------
+
+Viewing and editing cover individual values; search, sort, and filter
+help you make sense of the dataset as a whole — especially once a file
+grows beyond what you can scan by eye.
+
+H3: Searching Within CSV Data
+
+Searching finds and highlights matching values anywhere in the table,
+jumping you to the relevant cell or row rather than hiding anything.
+It's the fastest way to confirm whether a specific value — an email
+address, an ID, a product code — exists in the file, and exactly where.
+
+H3: Sorting Rows and Columns
+
+Sorting reorders the rows in the table based on the values in a chosen
+column, either ascending or descending. Sorting a "date" column brings
+records into chronological order; sorting a "price" column ranks records
+from lowest to highest (or the reverse) — without changing any of the
+underlying data, only its display order.
+
+H3: Filtering Data by Condition
+
+Filtering is different from searching: instead of finding a value,
+filtering hides every row that doesn't match a condition you set,
+leaving only the relevant subset visible. This is useful for narrowing a
+large file down to exactly the records you need to review or edit — for
+example, showing only rows where a "status" column equals "pending."
+
+H3: Removing Duplicate Rows
+
+Duplicate rows are common in exported data, especially after merging
+files from multiple sources. Identifying and removing exact duplicates
+cleans the dataset without manually scanning every row, and keeps a
+single accurate copy of each record.
+
+
+--------------------------------------------------------------------------------
+H2: Understanding CSV File Structure and Formatting Issues
+--------------------------------------------------------------------------------
+
+Most CSV problems aren't random — they come from a small set of
+predictable causes in how the format works. Understanding these makes it
+far easier to diagnose why a file looks wrong.
+
+H3: How Delimiters Affect Table Rendering
+
+A CSV file is split into columns purely by looking for its delimiter
+character (usually a comma). If a data value itself contains that same
+character — for example, a description field that includes a comma —
+and the file wasn't written correctly, the parser has no way to tell the
+difference between "a comma that separates two fields" and "a comma
+that's part of the data." The result is that everything after that
+comma shifts one column to the right, and the table looks misaligned
+from that point onward.
+
+H3: Quoted Fields and Commas Inside Data
+
+The fix, built into the CSV format itself, is quoting. Any field that
+contains the delimiter character, a line break, or a quote character is
+wrapped in double quotes, like this:
+
+  Tom Reyes,"Manila, Philippines",tom@example.com
+
+Here, "Manila, Philippines" is treated as a single field because it's
+enclosed in quotes, even though it contains a comma. A correct CSV
+parser recognizes quoted sections and ignores delimiters inside them —
+this is exactly why a properly built viewer can display files that a
+naive comma-split would break.
+
+H3: Character Encoding (UTF-8) and Corrupted Text
+
+"Corrupted" or garbled characters — letters replaced with strange
+symbols — almost always come down to encoding. Text files store
+characters as bytes, and the encoding is the rule used to translate
+between bytes and visible characters. UTF-8 is the standard most CSV
+files use today, and it can represent virtually any character in any
+language. If a file was saved in a different encoding (for example, an
+older Windows-specific one) and it's then read assuming UTF-8, any
+character outside basic English letters and numbers can come out wrong.
+Re-saving or re-exporting the source file as UTF-8 is usually the fix.
+
+H3: Newlines Inside Quoted Fields
+
+A single CSV "row," as written in the raw file, doesn't always occupy a
+single line of text. If a quoted field contains a line break — for
+example, a multi-line address or notes field — that line break is part
+of the data, not a signal that a new row has started. A correct parser
+keeps reading until it finds the closing quote, even if that means
+spanning several physical lines, before treating the row as complete.
+This is a common source of confusion when a file "has more rows than
+expected" after being opened incorrectly.
+
+H3: Handling Empty or Missing Values
+
+An empty field in a CSV file — two delimiters in a row, with nothing
+between them — is different from a field containing a space or a
+placeholder like "N/A." A well-built viewer distinguishes a genuinely
+empty cell from one that merely looks empty, which matters when you're
+searching, filtering, or validating data for completeness.
+
+
+--------------------------------------------------------------------------------
+H2: Compatibility With Excel, Sheets, and Other Tools
+--------------------------------------------------------------------------------
+
+H3: Opening CSV Files Exported From This Tool in Excel
+
+Because the export is a standard, correctly quoted CSV file, it opens
+cleanly in Excel, Google Sheets, Apple Numbers, or any database or
+programming tool that accepts CSV as an import format. There's no
+proprietary formatting or hidden structure that would prevent the file
+from being read elsewhere.
+
+One thing worth knowing: opening a CSV directly in Excel can sometimes
+silently change your data on Excel's side — for example, stripping
+leading zeros from a ZIP code or ID number, or auto-converting a text
+value that looks like a date into an actual date. This happens in
+Excel's import step, not in the CSV file itself, so the underlying data
+you edited and downloaded here remains accurate even if Excel later
+reinterprets it.
+
+H3: Converting CSV to Other Formats
+
+If your next step requires a different format — such as JSON for a
+development workflow, or XLSX for a formatted spreadsheet — export the
+edited data as CSV first, then convert it using a format-specific tool.
+Keeping the CSV as the intermediate step preserves a plain, portable
+version of your data before it's transformed into something format-
+specific.
+
+
+--------------------------------------------------------------------------------
+H2: Is It Safe to View and Edit CSV Files Online?
+--------------------------------------------------------------------------------
+
+H3: How Your File Is Processed (Local vs Server-Based)
+
+When you upload a file, it's read and rendered directly in your
+browser — the parsing, table rendering, editing, and export all happen
+using your browser's own processing, not by sending the file to a
+remote server for a different program to open. Practically, this means
+your file's contents aren't transmitted anywhere just to be viewed or
+edited.
+
+H3: Data Retention and File Size Limits
+
+Because processing happens locally, there's nothing stored on a server
+after you close or refresh the page — there's no file to retain because
+none was uploaded to begin with. File size is limited only by what your
+browser can comfortably hold and render in memory; very large files
+(tens of thousands of rows or more) may take longer to load, but the
+processing model stays the same regardless of size.
+
+
+--------------------------------------------------------------------------------
+H2: Common Use Cases for an Online CSV Viewer & Editor
+--------------------------------------------------------------------------------
+
+H3: Reviewing Business and Reporting Data
+
+Exports from CRMs, accounting software, and internal reporting tools
+routinely come as CSV. Rather than opening a full spreadsheet
+application just to check a few values, this tool lets you upload,
+scan, and correct that data in seconds.
+
+H3: Inspecting E-Commerce or Database Exports
+
+Product catalogs, order histories, and customer lists exported from
+e-commerce platforms or databases are almost always CSV by default.
+Viewing and lightly editing these exports — fixing a price, updating a
+SKU, removing a test record — is a common, quick task this tool is
+built for.
+
+H3: Academic and Research Data Handling
+
+Datasets shared for research or coursework are frequently distributed as
+CSV files precisely because the format is universal and doesn't depend
+on any particular software license. Being able to open, inspect, and
+lightly clean a dataset without installing anything makes it easier to
+get started working with the data itself.
+
+
+--------------------------------------------------------------------------------
+H2: Frequently Asked Questions
+--------------------------------------------------------------------------------
+
+Q: What is a CSV file?
+A: A CSV (Comma-Separated Values) file is a plain text file that stores
+tabular data, with each line representing one row and commas separating
+the individual values within that row.
+
+Q: What does CSV stand for?
+A: CSV stands for Comma-Separated Values, describing both the file
+format and the character most commonly used to separate data fields
+within it.
+
+Q: What is a CSV delimiter?
+A: A delimiter is the character used to separate individual values
+within a row. The comma is the default in a CSV file, though semicolons,
+tabs, and pipes are also used depending on the source of the data.
+
+Q: What is the difference between CSV and Excel (XLSX)?
+A: CSV is a plain text format that stores only raw values, with no
+formulas, formatting, or multiple sheets. XLSX is Excel's native binary
+format, capable of storing formulas, multiple sheets, and visual
+formatting alongside the data.
+
+Q: What is the difference between CSV and TSV?
+A: The only structural difference is the delimiter: CSV separates values
+with commas, while TSV (Tab-Separated Values) uses tab characters
+instead. Both store the same kind of plain-text tabular data.
+
+Q: Can a CSV file contain multiple sheets?
+A: No. A CSV file can only represent a single table of data. If you need
+multiple sheets, that requires a spreadsheet format like XLSX rather
+than CSV.
+
+Q: What is a header row in a CSV file?
+A: A header row is the first line of a CSV file when it's used to name
+each column, rather than containing data. Not every CSV file has one —
+without it, the first line is treated as regular data.
+
+Q: How do I view a CSV file online?
+A: Upload your .csv file or paste its contents into the tool above. It's
+parsed and displayed as a table in your browser automatically, with no
+software installation required.
+
+Q: How do I edit a CSV file online?
+A: After your file loads as a table, click into any cell to edit its
+value directly, or use the row and column controls to add or remove
+data. Download the result as an updated CSV file when finished.
+
+Q: Can I open CSV files without Excel?
+A: Yes. Since a CSV file is plain text, any tool that can read and
+render that structure — including this browser-based viewer — can open
+it without Excel or any other spreadsheet software installed.
+
+Q: Can I download my edited CSV file?
+A: Yes. Once you've made your edits, you can export and download the
+updated table as a standard .csv file, ready to use anywhere CSV files
+are accepted.
+
+Q: Can I search inside a CSV file online?
+A: Yes. The search function locates matching values anywhere in the
+table and highlights them, making it fast to confirm whether specific
+data exists and where it's located.
+
+Q: Can I sort or filter CSV data online?
+A: Yes. Sorting reorders rows by a chosen column's values, while
+filtering hides rows that don't match a condition you set — both
+without altering the underlying data.
+
+Q: Can I remove duplicate rows from a CSV file?
+A: Yes. Exact duplicate rows can be identified and removed, which is
+especially useful after combining data from multiple exported files.
+
+Q: Why does my CSV file display incorrectly?
+A: This is usually caused by an unescaped delimiter inside a data value,
+an encoding mismatch, or a line break inside an unquoted field — all
+covered in detail in the file structure section above.
+
+Q: Why are the characters in my CSV corrupted or garbled?
+A: Corrupted characters typically result from an encoding mismatch — the
+file was saved in one character encoding but is being read as if it
+were UTF-8 (or vice versa). Re-saving the source file as UTF-8 usually
+resolves it.
+
+Q: Why are my CSV columns misaligned?
+A: Misaligned columns are almost always caused by a comma (or other
+delimiter) inside a data value that wasn't wrapped in quotes, which
+shifts every value after it one column to the right.
+
+Q: Why does a comma inside my data break the columns?
+A: Because a CSV parser splits fields purely by looking for the
+delimiter character. If a value itself contains that character and
+isn't quoted, the parser can't tell it apart from an actual field
+separator.
+
+Q: Why does my CSV file open as one single column?
+A: This usually means the file uses a different delimiter than the one
+being assumed — for example, a semicolon-delimited file opened by a
+tool expecting commas will show every value crammed into a single
+column.
+
+Q: Can large CSV files be opened in a browser?
+A: Yes, though very large files (tens of thousands of rows or more) take
+longer to load and render, since the browser needs to process and
+display the full dataset.
+
+Q: Is there a file size limit for viewing or editing CSV files?
+A: There's no fixed limit, but practical performance depends on your
+browser's available memory — larger files render more slowly as size
+increases.
+
+Q: Does this tool support delimiters other than commas?
+A: Yes. Semicolon, tab, and pipe-delimited files are also supported and
+detected automatically when the file is loaded.
+
+Q: Is it safe to view CSV files online?
+A: Yes. Files are read and processed directly in your browser rather
+than uploaded to a server, so the contents aren't transmitted elsewhere
+just to be viewed or edited.
+
+Q: Does this tool store or upload my file to a server?
+A: No. Processing happens locally in your browser, so there's nothing
+retained on a server after you close or refresh the page.
+
+Q: Is my data private when I use this CSV viewer?
+A: Since your file is processed locally rather than sent to a server,
+its contents stay on your device throughout the viewing and editing
+process.
+
+Q: Why did my leading zeros disappear from my CSV (e.g., ZIP codes)?
+A: This typically happens when a CSV file is opened directly in Excel,
+which auto-converts number-like text and strips leading zeros. The
+underlying CSV data itself isn't affected — only how Excel displays it
+after import.
+
+Q: Why did dates change format in my CSV file?
+A: Like leading zeros, this is usually an Excel auto-formatting
+behavior applied when a CSV is imported, not a change to the raw data
+in the file itself.
+
+Q: Can I edit a CSV file on my phone or tablet?
+A: Yes. Since the tool runs in the browser, it works on mobile and
+tablet devices the same way it does on desktop, without requiring any
+app installation.
+
+Q: What happens to line breaks inside a CSV cell?
+A: A line break inside a quoted field is treated as part of that field's
+data, not as the start of a new row — the parser keeps reading until it
+reaches the closing quote.
+
+Q: Can I convert my CSV file to another format after editing?
+A: Download your edited data as CSV first, then use a dedicated
+conversion tool if you need a different format, such as JSON or XLSX,
+for your next step.
+
+================================================================================
+END OF HOMEPAGE CONTENT
+================================================================================
