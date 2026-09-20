@@ -82,29 +82,43 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "CSV Viewer — Fast, In-Browser CSV Tool" },
+      {
+        title: "CSV Viewer & Editor Online — Fast, In-Browser CSV & TSV Tool",
+      },
       {
         name: "description",
         content:
-          "Fast, in-browser CSV & TSV viewer and editor with zero-lag virtualized scrolling, deep search, column filters, stats, and multi-format export. 100% client-side, zero server uploads.",
+          "Free online CSV viewer and editor. Open, view, search, sort, and filter large CSV & TSV files (100k+ rows) in your browser. 100% private, zero server uploads.",
       },
       { name: "author", content: "CSV Viewer" },
-      { property: "og:title", content: "CSV Viewer — Fast, In-Browser CSV Tool" },
+      {
+        property: "og:title",
+        content: "CSV Viewer & Editor Online — Fast, In-Browser CSV & TSV Tool",
+      },
       {
         property: "og:description",
         content:
-          "Fast, in-browser CSV & TSV viewer with zero-lag virtualized scrolling, instant search, and complete privacy. Files never leave your device.",
+          "Free online CSV viewer and editor. Open, view, search, sort, filter, and edit large CSV & TSV files directly in your browser with zero lag. 100% private.",
       },
+      { property: "og:url", content: "https://csvviewer.github.io/" },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "CSV Viewer & Editor Online" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "CSV Viewer — Fast, In-Browser CSV Tool" },
+      {
+        name: "twitter:title",
+        content: "CSV Viewer & Editor Online — Fast, In-Browser CSV & TSV Tool",
+      },
       {
         name: "twitter:description",
         content:
-          "Fast, in-browser CSV & TSV viewer with zero-lag virtualized scrolling, instant search, and complete privacy.",
+          "Open, view, search, sort, filter, and edit large CSV & TSV files directly in your browser with zero lag. 100% in-browser, no uploads.",
       },
     ],
     links: [
+      {
+        rel: "canonical",
+        href: "https://csvviewer.github.io/",
+      },
       {
         rel: "stylesheet",
         href: appCss,
@@ -118,11 +132,82 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+const schemaJson = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "CSV Viewer & Editor Online",
+    url: "https://csvviewer.github.io/",
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Any",
+    browserRequirements: "Requires JavaScript",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+    description:
+      "Free online CSV viewer and editor. Open, view, search, sort, filter, and edit large CSV & TSV files directly in your browser. 100% private, zero server uploads.",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "Is my CSV data uploaded to any server?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "No. All parsing, filtering, and data manipulation happen strictly on your local machine via your browser's JavaScript engine. Your files are never sent over the network, ensuring complete confidentiality for sensitive financial, legal, or personal data.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "How does this tool handle large CSV files with 100,000+ rows?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "CSV Viewer uses DOM virtualization powered by TanStack Virtual. It only mounts the rows currently visible inside your viewport, allowing you to scroll through massive datasets (100k+ rows) with zero latency and 60fps responsiveness.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Can I edit cell values and export my changes?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes. Double-click any cell in the grid to edit its content. You can undo edits at any time with Ctrl+Z. Once finished, you can export your data to CSV, TSV, JSON, or Markdown tables, or copy directly to your clipboard.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "What file formats and delimiters are supported?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "CSV Viewer supports CSV (.csv), TSV (.tsv), and plain text (.txt) files. You can choose between automatic delimiter detection or manually specify comma, semicolon, tab, or pipe delimiters, with support for UTF-8, Windows-1252, ISO-8859-1, UTF-16, and Shift-JIS encodings.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Do I need to install software or create an account?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "No. CSV Viewer is 100% free, requires no login, no cookies, and no software installation. Use it directly in your browser anytime.",
+        },
+      },
+    ],
+  },
+];
+
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(schemaJson),
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -171,7 +256,7 @@ function RootComponent() {
         <header className="sticky top-0 z-30 border-b border-border/80 bg-background/95 backdrop-blur">
           <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
             <div className="flex items-center gap-6">
-              <Link to="/" className="flex items-center gap-2 font-semibold text-foreground">
+              <a href="#viewer" className="flex items-center gap-2 font-semibold text-foreground">
                 <div className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
                   <FileSpreadsheet className="size-4" />
                 </div>
@@ -179,21 +264,27 @@ function RootComponent() {
                 <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-border bg-secondary/80 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
                   <Shield className="size-3 text-emerald-500" /> 100% In-Browser
                 </span>
-              </Link>
+              </a>
 
               <nav className="flex items-center gap-1 text-xs">
-                <Link
-                  to="/"
-                  className="rounded-md px-2.5 py-1.5 font-medium text-muted-foreground transition-colors hover:text-foreground [&.active]:bg-secondary [&.active]:text-foreground"
+                <a
+                  href="#viewer"
+                  className="rounded-md px-2.5 py-1.5 font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-secondary/60"
                 >
                   Viewer
-                </Link>
-                <Link
-                  to="/about"
-                  className="rounded-md px-2.5 py-1.5 font-medium text-muted-foreground transition-colors hover:text-foreground [&.active]:bg-secondary [&.active]:text-foreground"
+                </a>
+                <a
+                  href="#guide"
+                  className="rounded-md px-2.5 py-1.5 font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-secondary/60"
                 >
-                  About & Privacy
-                </Link>
+                  Features & Guide
+                </a>
+                <a
+                  href="#faq"
+                  className="rounded-md px-2.5 py-1.5 font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-secondary/60"
+                >
+                  FAQ
+                </a>
               </nav>
             </div>
 
@@ -219,19 +310,24 @@ function RootComponent() {
         </main>
 
         {/* Footer */}
-        <footer className="border-t border-border/60 bg-muted/20 py-4 text-xs text-muted-foreground">
-          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 sm:flex-row sm:px-6">
+        <footer className="border-t border-border/60 bg-muted/20 py-6 text-xs text-muted-foreground">
+          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6">
             <div className="flex items-center gap-2">
               <Shield className="size-3.5 text-emerald-500" />
-              <span>Files never leave your browser • 100% local processing</span>
+              <span>
+                CSV Viewer & Editor Online — 100% Client-Side. Files never leave your device.
+              </span>
             </div>
             <div className="flex items-center gap-4">
-              <Link to="/" className="hover:text-foreground transition-colors">
+              <a href="#viewer" className="hover:text-foreground transition-colors">
                 Viewer
-              </Link>
-              <Link to="/about" className="hover:text-foreground transition-colors">
-                About & Privacy
-              </Link>
+              </a>
+              <a href="#guide" className="hover:text-foreground transition-colors">
+                Features & Guide
+              </a>
+              <a href="#faq" className="hover:text-foreground transition-colors">
+                FAQ
+              </a>
             </div>
           </div>
         </footer>
