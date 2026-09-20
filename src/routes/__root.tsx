@@ -124,6 +124,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Free CSV Viewer & Editor online. Open, view, edit, sort, and filter CSV files directly in your browser. Fast, private, and no software or account required.",
       },
       { name: "twitter:image", content: "https://csvviewer.github.io/og.png" },
+      {
+        name: "google-site-verification",
+        content: "hACx7f0QfZ3hgPRjNzYJCbvWN8F0GFDhn8dUlacw9lw",
+      },
+      {
+        name: "msvalidate.01",
+        content: "53E47B20B5F728E50CFF5E42E08C4872",
+      },
     ],
     links: [
       {
