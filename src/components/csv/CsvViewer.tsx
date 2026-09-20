@@ -3,13 +3,16 @@ import {
   Columns3,
   Copy,
   Download,
+  FileDown,
   Filter,
   Keyboard,
   Plus,
   Search,
+  ShieldCheck,
   Sigma,
   Undo2,
   X,
+  Zap,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -23,14 +26,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { DropZone } from "./DropZone";
 import { DataGrid, type ViewRow } from "./DataGrid";
 import { StatsPanel } from "./StatsPanel";
 import { ShortcutsDialog } from "./ShortcutsDialog";
 import { analyzeColumn, formatBytes, formatNumber, toNumber } from "@/lib/csv/analyze";
 import { baseName, download, toDelimited, toJson, toMarkdown } from "@/lib/csv/export";
-import { parseFile, parseText } from "@/lib/csv/parse";
+import { parseFile, parseText, readFile } from "@/lib/csv/parse";
 import { sampleCsv } from "@/lib/csv/sample";
 import {
   defaultParseOptions,
@@ -73,14 +82,20 @@ export function CsvViewer() {
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [matchCursor, setMatchCursor] = useState(0);
   const [scrollToRow, setScrollToRow] = useState<number | null>(null);
-  const [undoStack, setUndoStack] = useState<{ sheet: string; row: number; col: number; prev: string }[]>([]);
+  const [undoStack, setUndoStack] = useState<
+    { sheet: string; row: number; col: number; prev: string }[]
+  >([]);
   const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem(SETTINGS_KEY);
       if (!raw) return;
-      const parsed = JSON.parse(raw) as { options?: ParseOptions; showFilters?: boolean; showStats?: boolean };
+      const parsed = JSON.parse(raw) as {
+        options?: ParseOptions;
+        showFilters?: boolean;
+        showStats?: boolean;
+      };
       if (parsed.options) setOptions({ ...defaultParseOptions, ...parsed.options });
       if (typeof parsed.showFilters === "boolean") setShowFilters(parsed.showFilters);
       if (typeof parsed.showStats === "boolean") setShowStats(parsed.showStats);
@@ -138,11 +153,20 @@ export function CsvViewer() {
   );
 
   const reparse = useCallback(
-    (next: Partial<ParseOptions>) => {
+    async (next: Partial<ParseOptions>) => {
       const merged = { ...options, ...next };
       setOptions(merged);
       if (!active) return;
-      const fresh = parseText(active.raw, active.name, merged, active.bytes);
+      let raw = active.raw;
+      if (next.encoding && active.file) {
+        try {
+          raw = await readFile(active.file, merged.encoding);
+        } catch {
+          toast.error("Failed to re-read file with selected encoding");
+        }
+      }
+      const fresh = parseText(raw, active.name, merged, active.bytes);
+      fresh.file = active.file;
       setSheets((prev) => prev.map((s) => (s.id === active.id ? { ...fresh, id: s.id } : s)));
       setViews((prev) => ({ ...prev, [active.id]: initialView(fresh.columns.length) }));
     },
@@ -261,7 +285,8 @@ export function CsvViewer() {
       const data = rows.map((r) => visibleOrder.map((c) => r.cells[c] ?? ""));
       const name = baseName(active.name);
       if (format === "csv") download(`${name}.csv`, toDelimited(cols, data, ","), "text/csv");
-      if (format === "tsv") download(`${name}.tsv`, toDelimited(cols, data, "\t"), "text/tab-separated-values");
+      if (format === "tsv")
+        download(`${name}.tsv`, toDelimited(cols, data, "\t"), "text/tab-separated-values");
       if (format === "json") download(`${name}.json`, toJson(cols, data), "application/json");
       if (format === "md") download(`${name}.md`, toMarkdown(cols, data), "text/markdown");
       if (format === "clipboard") {
@@ -309,7 +334,9 @@ export function CsvViewer() {
   const jumpMatch = (dir: 1 | -1) => {
     const q = view.search.trim().toLowerCase();
     if (!q) return;
-    const hits = rows.map((r, i) => (r.cells.some((c) => c.toLowerCase().includes(q)) ? i : -1)).filter((i) => i >= 0);
+    const hits = rows
+      .map((r, i) => (r.cells.some((c) => c.toLowerCase().includes(q)) ? i : -1))
+      .filter((i) => i >= 0);
     if (!hits.length) return;
     const next = (matchCursor + dir + hits.length) % hits.length;
     setMatchCursor(next);
@@ -318,8 +345,66 @@ export function CsvViewer() {
 
   if (!active) {
     return (
-      <div className="mx-auto w-full max-w-3xl">
-        <DropZone onFiles={handleFiles} onText={handleText} onUrl={handleUrl} onSample={() => handleText(sampleCsv, "sample-orders.csv")} />
+      <div className="mx-auto w-full max-w-3xl space-y-8 py-4">
+        <div className="text-center space-y-1.5">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+            Fast, in-browser CSV viewer
+          </h1>
+          <p className="text-sm text-muted-foreground max-w-lg mx-auto">
+            View, search, filter, and edit large CSV files with instant zero-lag virtualized
+            scrolling. Your files never leave your computer.
+          </p>
+        </div>
+
+        <DropZone
+          onFiles={handleFiles}
+          onText={handleText}
+          onUrl={handleUrl}
+          onSample={() => handleText(sampleCsv, "sample-orders.csv")}
+        />
+
+        {/* Value line & feature strip below the fold */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-4 border-t border-border">
+          <div className="rounded-lg border border-border bg-card p-3.5 space-y-1">
+            <div className="flex items-center gap-2 text-foreground font-semibold text-xs">
+              <Zap className="size-4 text-primary shrink-0" />
+              <span>Virtualized Grid</span>
+            </div>
+            <p className="text-[12px] text-muted-foreground leading-relaxed">
+              Renders 100k+ rows smoothly at 60fps without browser lockup.
+            </p>
+          </div>
+
+          <div className="rounded-lg border border-border bg-card p-3.5 space-y-1">
+            <div className="flex items-center gap-2 text-foreground font-semibold text-xs">
+              <ShieldCheck className="size-4 text-primary shrink-0" />
+              <span>100% Client-Side</span>
+            </div>
+            <p className="text-[12px] text-muted-foreground leading-relaxed">
+              Zero server uploads, zero trackers. Your data remains strictly local.
+            </p>
+          </div>
+
+          <div className="rounded-lg border border-border bg-card p-3.5 space-y-1">
+            <div className="flex items-center gap-2 text-foreground font-semibold text-xs">
+              <Search className="size-4 text-primary shrink-0" />
+              <span>Deep Search & Filters</span>
+            </div>
+            <p className="text-[12px] text-muted-foreground leading-relaxed">
+              Instant match highlights, per-column filters, and numeric-aware sorting.
+            </p>
+          </div>
+
+          <div className="rounded-lg border border-border bg-card p-3.5 space-y-1">
+            <div className="flex items-center gap-2 text-foreground font-semibold text-xs">
+              <FileDown className="size-4 text-primary shrink-0" />
+              <span>Edit & Multi-Export</span>
+            </div>
+            <p className="text-[12px] text-muted-foreground leading-relaxed">
+              In-place cell edits with undo. Export to CSV, TSV, JSON, Markdown, or clipboard.
+            </p>
+          </div>
+        </div>
       </div>
     );
   }
@@ -399,10 +484,18 @@ export function CsvViewer() {
           )}
         </div>
 
-        <Button variant={showFilters ? "secondary" : "ghost"} size="sm" onClick={() => setShowFilters((v) => !v)}>
+        <Button
+          variant={showFilters ? "secondary" : "ghost"}
+          size="sm"
+          onClick={() => setShowFilters((v) => !v)}
+        >
           <Filter className="size-4" /> Filters
         </Button>
-        <Button variant={showStats ? "secondary" : "ghost"} size="sm" onClick={() => setShowStats((v) => !v)}>
+        <Button
+          variant={showStats ? "secondary" : "ghost"}
+          size="sm"
+          onClick={() => setShowStats((v) => !v)}
+        >
           <Sigma className="size-4" /> Stats
         </Button>
 
@@ -419,7 +512,9 @@ export function CsvViewer() {
                 key={i}
                 checked={!view.hidden.includes(i)}
                 onCheckedChange={(checked) =>
-                  patchView({ hidden: checked ? view.hidden.filter((c) => c !== i) : [...view.hidden, i] })
+                  patchView({
+                    hidden: checked ? view.hidden.filter((c) => c !== i) : [...view.hidden, i],
+                  })
                 }
               >
                 <span className="truncate">{name}</span>
@@ -428,7 +523,10 @@ export function CsvViewer() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <Select value={options.delimiter} onValueChange={(v) => reparse({ delimiter: v as Delimiter })}>
+        <Select
+          value={options.delimiter}
+          onValueChange={(v) => reparse({ delimiter: v as Delimiter })}
+        >
           <SelectTrigger size="sm" className="w-auto gap-1">
             <SelectValue />
           </SelectTrigger>
@@ -441,7 +539,24 @@ export function CsvViewer() {
           </SelectContent>
         </Select>
 
-        <Button variant="ghost" size="sm" onClick={() => reparse({ hasHeader: !options.hasHeader })}>
+        <Select value={options.encoding} onValueChange={(v) => reparse({ encoding: v })}>
+          <SelectTrigger size="sm" className="w-auto gap-1">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="utf-8">UTF-8</SelectItem>
+            <SelectItem value="windows-1252">Windows-1252</SelectItem>
+            <SelectItem value="iso-8859-1">ISO-8859-1</SelectItem>
+            <SelectItem value="utf-16le">UTF-16 LE</SelectItem>
+            <SelectItem value="shift_jis">Shift-JIS</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => reparse({ hasHeader: !options.hasHeader })}
+        >
           {options.hasHeader ? "Header row: on" : "Header row: off"}
         </Button>
 
@@ -468,7 +583,12 @@ export function CsvViewer() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <Button variant="ghost" size="sm" onClick={() => setShortcutsOpen(true)} aria-label="Keyboard shortcuts">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setShortcutsOpen(true)}
+          aria-label="Keyboard shortcuts"
+        >
           <Keyboard className="size-4" />
         </Button>
       </div>
@@ -509,8 +629,12 @@ export function CsvViewer() {
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] tabular-nums text-muted-foreground">
         <span>{formatNumber(rows.length)} rows shown</span>
         <span>{formatNumber(active.rows.length)} total</span>
-        <span>{formatNumber(visibleOrder.length)} of {active.columns.length} columns</span>
-        <span>delimiter “{active.detectedDelimiter === "\t" ? "tab" : active.detectedDelimiter}”</span>
+        <span>
+          {formatNumber(visibleOrder.length)} of {active.columns.length} columns
+        </span>
+        <span>
+          delimiter “{active.detectedDelimiter === "\t" ? "tab" : active.detectedDelimiter}”
+        </span>
         <span>{formatBytes(active.bytes)}</span>
       </div>
 

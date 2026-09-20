@@ -127,7 +127,9 @@ export function DataGrid({
                   title={`${columns[col]} — ${stats[col]?.kind ?? "text"}`}
                 >
                   <GripVertical className="size-3 shrink-0 cursor-grab text-muted-foreground/50 opacity-0 transition-opacity group-hover:opacity-100" />
-                  <span className="truncate text-xs font-semibold text-foreground">{columns[col]}</span>
+                  <span className="truncate text-xs font-semibold text-foreground">
+                    {columns[col]}
+                  </span>
                   {sort?.column === col ? (
                     sort.dir === "asc" ? (
                       <ArrowUp className="ml-auto size-3 shrink-0 text-primary" />
@@ -152,7 +154,11 @@ export function DataGrid({
             <div className="flex border-b border-border bg-card/80">
               <div className="w-16 shrink-0 border-r border-border" />
               {order.map((col) => (
-                <div key={col} style={{ width: widths[col] ?? DEFAULT_WIDTH }} className="shrink-0 border-r border-border p-1">
+                <div
+                  key={col}
+                  style={{ width: widths[col] ?? DEFAULT_WIDTH }}
+                  className="shrink-0 border-r border-border p-1"
+                >
                   <input
                     value={filters[col] ?? ""}
                     onChange={(e) => onFilter(col, e.target.value)}
@@ -234,7 +240,9 @@ export function DataGrid({
         </div>
 
         {rows.length === 0 && (
-          <div className="p-10 text-center text-sm text-muted-foreground">No rows match the current search or filters.</div>
+          <div className="p-10 text-center text-sm text-muted-foreground">
+            No rows match the current search or filters.
+          </div>
         )}
       </div>
     </div>

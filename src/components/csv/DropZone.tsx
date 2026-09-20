@@ -86,7 +86,9 @@ export function DropZone({ onFiles, onText, onUrl, onSample, compact }: Props) {
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Paste CSV text</DialogTitle>
-                <DialogDescription>Paste rows copied from a spreadsheet or a text file.</DialogDescription>
+                <DialogDescription>
+                  Paste rows copied from a spreadsheet or a text file.
+                </DialogDescription>
               </DialogHeader>
               <Textarea
                 value={pasted}
@@ -118,7 +120,9 @@ export function DropZone({ onFiles, onText, onUrl, onSample, compact }: Props) {
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Load a CSV from a link</DialogTitle>
-                <DialogDescription>The file is fetched straight into your browser.</DialogDescription>
+                <DialogDescription>
+                  The file is fetched straight into your browser.
+                </DialogDescription>
               </DialogHeader>
               <Input
                 value={url}

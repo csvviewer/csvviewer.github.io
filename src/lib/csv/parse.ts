@@ -27,7 +27,8 @@ export function parseText(
   options: ParseOptions,
   bytes = raw.length,
 ): Sheet {
-  const delimiter = options.delimiter === "auto" ? detectDelimiter(raw.slice(0, 64_000)) : options.delimiter;
+  const delimiter =
+    options.delimiter === "auto" ? detectDelimiter(raw.slice(0, 64_000)) : options.delimiter;
 
   const result = Papa.parse<string[]>(raw, {
     delimiter,
@@ -35,7 +36,9 @@ export function parseText(
     dynamicTyping: false,
   });
 
-  const data = (result.data as unknown[][]).map((r) => (r ?? []).map((c) => (c == null ? "" : String(c))));
+  const data = (result.data as unknown[][]).map((r) =>
+    (r ?? []).map((c) => (c == null ? "" : String(c))),
+  );
 
   let columns: string[];
   let rows: string[][];
@@ -49,7 +52,10 @@ export function parseText(
     rows = data;
   }
 
-  const width = Math.max(columns.length, rows.reduce((m, r) => Math.max(m, r.length), 0));
+  const width = Math.max(
+    columns.length,
+    rows.reduce((m, r) => Math.max(m, r.length), 0),
+  );
   while (columns.length < width) columns.push(`Column ${columns.length + 1}`);
   const normalized = rows.map((r) => {
     if (r.length === width) return r;
@@ -82,5 +88,7 @@ export async function readFile(file: File, encoding: string): Promise<string> {
 
 export async function parseFile(file: File, options: ParseOptions): Promise<Sheet> {
   const raw = await readFile(file, options.encoding);
-  return parseText(raw, file.name, options, file.size);
+  const sheet = parseText(raw, file.name, options, file.size);
+  sheet.file = file;
+  return sheet;
 }
