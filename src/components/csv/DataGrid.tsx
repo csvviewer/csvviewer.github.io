@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { ArrowDown, ArrowUp, ChevronsUpDown, GripVertical } from "lucide-react";
 import type { ColumnStats, SortState } from "@/lib/csv/types";
+import { useViewerLayout } from "@/context/ViewerLayoutContext";
 
 export type ViewRow = { index: number; cells: string[] };
 
@@ -70,6 +71,7 @@ export function DataGrid({
   const parentRef = useRef<HTMLDivElement>(null);
   const [dragCol, setDragCol] = useState<number | null>(null);
   const [editing, setEditing] = useState<{ row: number; col: number; value: string } | null>(null);
+  const { isFullBody } = useViewerLayout();
 
   const virtualizer = useVirtualizer({
     count: rows.length,
@@ -100,7 +102,9 @@ export function DataGrid({
   return (
     <div
       ref={parentRef}
-      className="relative h-[calc(100vh-17rem)] min-h-80 overflow-auto rounded-lg border border-border bg-card"
+      className={`relative ${
+        isFullBody ? "flex-1 h-full min-h-[300px]" : "h-[calc(100vh-17rem)] min-h-80"
+      } overflow-auto rounded-lg border border-border bg-card`}
     >
       <div style={{ width: totalWidth }} className="min-w-full">
         <div className="sticky top-0 z-20 bg-secondary/95 backdrop-blur">

@@ -16,6 +16,9 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { Toaster } from "@/components/ui/sonner";
 import { ShortcutsDialog } from "@/components/csv/ShortcutsDialog";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/Logo";
+import { BackToTop } from "@/components/BackToTop";
+import { ViewerLayoutProvider, useViewerLayout } from "@/context/ViewerLayoutContext";
 
 function NotFoundComponent() {
   return (
@@ -83,36 +86,44 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       {
-        title: "CSV Viewer & Editor — View, Edit, and Manage CSV Files Online",
+        title: "CSV Viewer & Editor Online — Fast, Free, Private, in Browser",
       },
       {
         name: "description",
         content:
-          "Open, view, and edit CSV files directly in your browser — no software to install, no account required. Upload a .csv file to see it rendered as an editable table, or paste your data straight in.",
+          "Free CSV Viewer & Editor online. Open, view, edit, sort, and filter CSV files directly in your browser. Fast, private, and no software or account required.",
       },
       { name: "author", content: "CSV Viewer" },
       {
         property: "og:title",
-        content: "CSV Viewer & Editor — View, Edit, and Manage CSV Files Online",
+        content: "CSV Viewer & Editor Online — Fast, Free, Private, in Browser",
       },
       {
         property: "og:description",
         content:
-          "Open, view, and edit CSV files directly in your browser — no software to install, no account required. Supports comma, semicolon, tab, and pipe-delimited files.",
+          "Free CSV Viewer & Editor online. Open, view, edit, sort, and filter CSV files directly in your browser. Fast, private, and no software or account required.",
       },
       { property: "og:url", content: "https://csvviewer.github.io/" },
       { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "CSV Viewer & Editor" },
+      { property: "og:site_name", content: "CSV Viewer & Editor Online" },
+      { property: "og:image", content: "https://csvviewer.github.io/og.png" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      {
+        property: "og:image:alt",
+        content: "CSV Viewer & Editor Online — Fast, Free, Private, in Browser",
+      },
       { name: "twitter:card", content: "summary_large_image" },
       {
         name: "twitter:title",
-        content: "CSV Viewer & Editor — View, Edit, and Manage CSV Files Online",
+        content: "CSV Viewer & Editor Online — Fast, Free, Private, in Browser",
       },
       {
         name: "twitter:description",
         content:
-          "Open, view, and edit CSV files directly in your browser — no software to install, no account required.",
+          "Free CSV Viewer & Editor online. Open, view, edit, sort, and filter CSV files directly in your browser. Fast, private, and no software or account required.",
       },
+      { name: "twitter:image", content: "https://csvviewer.github.io/og.png" },
     ],
     links: [
       {
@@ -123,7 +134,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      { rel: "alternate icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "apple-touch-icon", href: "/favicon.svg" },
     ],
   }),
   shellComponent: RootShell,
@@ -147,7 +160,7 @@ const schemaJson = [
       priceCurrency: "USD",
     },
     description:
-      "Free online CSV viewer and editor. Open, view, search, sort, filter, and edit large CSV & TSV files directly in your browser. 100% private, zero server uploads.",
+      "Free CSV Viewer & Editor online. Open, view, edit, sort, and filter CSV files directly in your browser. Fast, private, and no software or account required.",
   },
   {
     "@context": "https://schema.org",
@@ -234,7 +247,19 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ViewerLayoutProvider>
+        <RootApp />
+      </ViewerLayoutProvider>
+    </QueryClientProvider>
+  );
+}
+
+function RootApp() {
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  const { isFullBody } = useViewerLayout();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -250,73 +275,90 @@ function RootComponent() {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col bg-background text-foreground">
-        {/* Navigation Header */}
-        <header className="sticky top-0 z-30 border-b border-border/80 bg-background/95 backdrop-blur">
-          <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
-            <div className="flex items-center gap-6">
-              <a href="#viewer" className="flex items-center gap-2 font-semibold text-foreground">
-                <div className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
-                  <FileSpreadsheet className="size-4" />
-                </div>
-                <span className="text-sm font-bold tracking-tight">CSV Viewer</span>
-                <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-border bg-secondary/80 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-                  <Shield className="size-3 text-emerald-500" /> 100% In-Browser
-                </span>
-              </a>
+    <div
+      className={`flex min-h-screen flex-col bg-background text-foreground ${
+        isFullBody ? "h-screen overflow-hidden" : ""
+      }`}
+    >
+      {/* Navigation Header */}
+      <header className="sticky top-0 z-30 border-b border-border/80 bg-background/95 backdrop-blur">
+        <div
+          className={`mx-auto flex h-14 items-center justify-between px-4 sm:px-6 ${
+            isFullBody ? "w-full max-w-none" : "max-w-7xl"
+          }`}
+        >
+          <div className="flex items-center gap-6">
+            <a href="#viewer" className="flex items-center gap-3">
+              <Logo />
+              <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-border bg-secondary/80 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                <Shield className="size-3 text-emerald-500" /> 100% In-Browser
+              </span>
+            </a>
 
-              <nav className="flex items-center gap-1 text-xs">
-                <a
-                  href="#viewer"
-                  className="rounded-md px-2.5 py-1.5 font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-secondary/60"
-                >
-                  Viewer
-                </a>
-                <a
-                  href="#guide"
-                  className="rounded-md px-2.5 py-1.5 font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-secondary/60"
-                >
-                  Guide
-                </a>
-                <a
-                  href="#faq"
-                  className="rounded-md px-2.5 py-1.5 font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-secondary/60"
-                >
-                  FAQ
-                </a>
-              </nav>
-            </div>
-
-            <div className="flex items-center gap-1.5">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShortcutsOpen(true)}
-                className="size-8 p-0 text-muted-foreground hover:text-foreground"
-                title="Keyboard shortcuts (?)"
-                aria-label="Keyboard shortcuts"
+            <nav className="flex items-center gap-1 text-xs">
+              <a
+                href="#viewer"
+                className="rounded-md px-2.5 py-1.5 font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-secondary/60"
               >
-                <Keyboard className="size-4" />
-              </Button>
-              <ThemeToggle />
-            </div>
+                Viewer
+              </a>
+              {!isFullBody && (
+                <>
+                  <a
+                    href="#guide"
+                    className="rounded-md px-2.5 py-1.5 font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-secondary/60"
+                  >
+                    Guide
+                  </a>
+                  <a
+                    href="#faq"
+                    className="rounded-md px-2.5 py-1.5 font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-secondary/60"
+                  >
+                    FAQ
+                  </a>
+                </>
+              )}
+            </nav>
           </div>
-        </header>
 
-        {/* Main Content Area */}
-        <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <Outlet />
-        </main>
+          <div className="flex items-center gap-1.5">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShortcutsOpen(true)}
+              className="size-8 p-0 text-muted-foreground hover:text-foreground"
+              title="Keyboard shortcuts (?)"
+              aria-label="Keyboard shortcuts"
+            >
+              <Keyboard className="size-4" />
+            </Button>
+            <ThemeToggle />
+          </div>
+        </div>
+      </header>
 
-        {/* Footer */}
-        <footer className="border-t border-border/60 bg-muted/20 py-6 text-xs text-muted-foreground">
+      {/* Main Content Area */}
+      <main
+        className={
+          isFullBody
+            ? "flex-1 w-full px-2 sm:px-4 py-2 flex flex-col min-h-0 overflow-hidden"
+            : "flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 py-4"
+        }
+      >
+        <Outlet />
+      </main>
+
+      {/* Footer */}
+      {!isFullBody && (
+        <footer className="border-t border-border/60 bg-muted/20 py-8 text-xs text-muted-foreground">
           <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6">
             <div className="flex items-center gap-2">
               <Shield className="size-3.5 text-emerald-500" />
-              <span>CSV Viewer & Editor — 100% Client-Side. Files never leave your device.</span>
+              <span>
+                CSV Viewer &amp; Editor Online — 100% Client-Side. Files never leave your device.
+              </span>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4">
               <a href="#viewer" className="hover:text-foreground transition-colors">
                 Viewer
               </a>
@@ -326,16 +368,25 @@ function RootComponent() {
               <a href="#faq" className="hover:text-foreground transition-colors">
                 FAQ
               </a>
+              <a
+                href="mailto:me@junaid.pro.bd"
+                className="text-primary hover:underline font-medium transition-colors"
+              >
+                me@junaid.pro.bd
+              </a>
             </div>
           </div>
         </footer>
+      )}
 
-        {/* Global Notifications */}
-        <Toaster position="bottom-right" richColors />
+      {/* Global Notifications */}
+      <Toaster position="bottom-right" richColors />
 
-        {/* Global Shortcuts Dialog */}
-        <ShortcutsDialog open={shortcutsOpen} onOpenChange={setShortcutsOpen} />
-      </div>
-    </QueryClientProvider>
+      {/* Global Shortcuts Dialog */}
+      <ShortcutsDialog open={shortcutsOpen} onOpenChange={setShortcutsOpen} />
+
+      {/* Floating Back To Top / Viewer Button */}
+      {!isFullBody && <BackToTop />}
+    </div>
   );
 }

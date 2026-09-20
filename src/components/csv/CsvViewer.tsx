@@ -1,15 +1,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
+  ChevronDown,
+  ChevronUp,
   Columns3,
   Copy,
   Download,
   FileDown,
+  FileUp,
   Filter,
   Keyboard,
   Plus,
   Search,
   ShieldCheck,
   Sigma,
+  Sparkles,
   Undo2,
   X,
   Zap,
@@ -49,6 +53,7 @@ import {
   type Sheet,
   type SortState,
 } from "@/lib/csv/types";
+import { useViewerLayout } from "@/context/ViewerLayoutContext";
 
 const SETTINGS_KEY = "csvviewer.settings";
 
@@ -110,6 +115,12 @@ export function CsvViewer() {
 
   const active = sheets.find((s) => s.id === activeId) ?? null;
   const view = (activeId && views[activeId]) || initialView(active?.columns.length ?? 0);
+  const { isFullBody, setIsFullBody } = useViewerLayout();
+
+  useEffect(() => {
+    setIsFullBody(Boolean(active));
+    return () => setIsFullBody(false);
+  }, [active, setIsFullBody]);
 
   const addSheet = useCallback((sheet: Sheet) => {
     setSheets((prev) => [...prev, sheet]);
@@ -132,6 +143,49 @@ export function CsvViewer() {
     },
     [addSheet, options],
   );
+
+  const [windowDragOver, setWindowDragOver] = useState(false);
+  const dragCounter = useRef(0);
+
+  useEffect(() => {
+    const handleDragEnter = (e: DragEvent) => {
+      e.preventDefault();
+      dragCounter.current++;
+      if (e.dataTransfer?.types?.includes("Files")) {
+        setWindowDragOver(true);
+      }
+    };
+    const handleDragLeave = (e: DragEvent) => {
+      e.preventDefault();
+      dragCounter.current--;
+      if (dragCounter.current <= 0) {
+        setWindowDragOver(false);
+        dragCounter.current = 0;
+      }
+    };
+    const handleDragOver = (e: DragEvent) => {
+      e.preventDefault();
+    };
+    const handleDrop = (e: DragEvent) => {
+      e.preventDefault();
+      setWindowDragOver(false);
+      dragCounter.current = 0;
+      const files = Array.from(e.dataTransfer?.files ?? []);
+      if (files.length) handleFiles(files);
+    };
+
+    window.addEventListener("dragenter", handleDragEnter);
+    window.addEventListener("dragleave", handleDragLeave);
+    window.addEventListener("dragover", handleDragOver);
+    window.addEventListener("drop", handleDrop);
+
+    return () => {
+      window.removeEventListener("dragenter", handleDragEnter);
+      window.removeEventListener("dragleave", handleDragLeave);
+      window.removeEventListener("dragover", handleDragOver);
+      window.removeEventListener("drop", handleDrop);
+    };
+  }, [handleFiles]);
 
   const handleText = useCallback(
     (text: string, name: string) => addSheet(parseText(text, name, options)),
@@ -357,7 +411,11 @@ export function CsvViewer() {
   }
 
   return (
-    <div className="space-y-3">
+    <div
+      className={
+        isFullBody ? "h-full flex flex-col min-h-0 space-y-2 w-full flex-1" : "space-y-3 w-full"
+      }
+    >
       {/* File tabs */}
       <div className="flex flex-wrap items-center gap-1.5">
         {sheets.map((s) => (
@@ -388,7 +446,7 @@ export function CsvViewer() {
             </button>
           </div>
         ))}
-        <label className="flex cursor-pointer items-center gap-1 rounded-md border border-dashed border-border px-2.5 py-1 text-xs text-muted-foreground hover:text-foreground">
+        <label className="flex cursor-pointer items-center gap-1 rounded-md border border-dashed border-border px-2.5 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
           <Plus className="size-3.5" /> Open file
           <input
             type="file"
@@ -402,11 +460,18 @@ export function CsvViewer() {
             }}
           />
         </label>
+        <button
+          type="button"
+          onClick={() => handleText(sampleCsv, "sample-orders.csv")}
+          className="flex items-center gap-1 rounded-md border border-dashed border-border px-2.5 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <Sparkles className="size-3.5 text-emerald-500" /> Sample CSV
+        </button>
       </div>
 
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-2 rounded-lg border border-border bg-card p-2">
-        <div className="relative min-w-52 flex-1">
+        <div className="relative min-w-56 flex-1">
           <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             ref={searchRef}
@@ -420,14 +485,51 @@ export function CsvViewer() {
                 e.preventDefault();
                 jumpMatch(e.shiftKey ? -1 : 1);
               }
+              if (e.key === "Escape") {
+                patchView({ search: "" });
+                setMatchCursor(0);
+              }
             }}
             placeholder="Search all cells…  (press /)"
-            className="h-9 pl-8 pr-24"
+            className="h-9 pl-8 pr-32"
           />
           {view.search && (
-            <span className="absolute right-2.5 top-1/2 -translate-y-1/2 font-mono text-[11px] tabular-nums text-muted-foreground">
-              {formatNumber(matchCount)} matches
-            </span>
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+              <span className="font-mono text-[11px] tabular-nums text-muted-foreground">
+                {matchCount > 0 ? `${matchCursor + 1}/${formatNumber(matchCount)}` : "0 matches"}
+              </span>
+              {matchCount > 0 && (
+                <div className="flex items-center">
+                  <button
+                    type="button"
+                    onClick={() => jumpMatch(-1)}
+                    className="rounded p-0.5 text-muted-foreground hover:bg-secondary hover:text-foreground"
+                    title="Previous match (Shift+Enter)"
+                  >
+                    <ChevronUp className="size-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => jumpMatch(1)}
+                    className="rounded p-0.5 text-muted-foreground hover:bg-secondary hover:text-foreground"
+                    title="Next match (Enter)"
+                  >
+                    <ChevronDown className="size-3.5" />
+                  </button>
+                </div>
+              )}
+              <button
+                type="button"
+                onClick={() => {
+                  patchView({ search: "" });
+                  setMatchCursor(0);
+                }}
+                className="rounded p-0.5 text-muted-foreground hover:bg-secondary hover:text-foreground"
+                title="Clear search (Esc)"
+              >
+                <X className="size-3.5" />
+              </button>
+            </div>
           )}
         </div>
 
@@ -511,6 +613,16 @@ export function CsvViewer() {
           <Undo2 className="size-4" /> Undo
         </Button>
 
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => exportData("clipboard")}
+          title="Copy visible data to clipboard (TSV)"
+          className="gap-1"
+        >
+          <Copy className="size-4" /> Copy
+        </Button>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="sm">
@@ -573,17 +685,47 @@ export function CsvViewer() {
         onEdit={editCell}
       />
 
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] tabular-nums text-muted-foreground">
-        <span>{formatNumber(rows.length)} rows shown</span>
-        <span>{formatNumber(active.rows.length)} total</span>
-        <span>
-          {formatNumber(visibleOrder.length)} of {active.columns.length} columns
-        </span>
-        <span>
-          delimiter “{active.detectedDelimiter === "\t" ? "tab" : active.detectedDelimiter}”
-        </span>
-        <span>{formatBytes(active.bytes)}</span>
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 font-mono text-[11px] tabular-nums text-muted-foreground pt-0.5">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+          <span>{formatNumber(rows.length)} rows shown</span>
+          <span>{formatNumber(active.rows.length)} total</span>
+          <span>
+            {formatNumber(visibleOrder.length)} of {active.columns.length} columns
+          </span>
+          <span>
+            delimiter “{active.detectedDelimiter === "\t" ? "tab" : active.detectedDelimiter}”
+          </span>
+          <span>{formatBytes(active.bytes)}</span>
+        </div>
+        {isFullBody && (
+          <div className="hidden font-sans text-[11px] sm:block text-muted-foreground/80">
+            <span>
+              100% Client-Side •{" "}
+              <a
+                href="mailto:me@junaid.pro.bd"
+                className="hover:text-foreground underline underline-offset-2"
+              >
+                me@junaid.pro.bd
+              </a>
+            </span>
+          </div>
+        )}
       </div>
+
+      {/* Global Window Drag Overlay */}
+      {windowDragOver && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-3 rounded-2xl border-2 border-dashed border-primary bg-card/90 p-10 text-center shadow-2xl">
+            <div className="flex size-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <FileUp className="size-8 animate-bounce" />
+            </div>
+            <p className="text-xl font-bold text-foreground">Drop CSV file to open</p>
+            <p className="text-sm text-muted-foreground">
+              Release anywhere on screen to load as a new tab
+            </p>
+          </div>
+        </div>
+      )}
 
       <ShortcutsDialog open={shortcutsOpen} onOpenChange={setShortcutsOpen} />
     </div>

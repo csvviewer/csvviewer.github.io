@@ -72,14 +72,22 @@ export function DropZone({ onFiles, onText, onUrl, onSample, compact }: Props) {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-2">
-          <Button onClick={() => inputRef.current?.click()}>
-            <FileUp className="size-4" /> Choose file
+        <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+          <Button onClick={() => inputRef.current?.click()} className="gap-1.5 shadow-sm">
+            <FileUp className="size-4" /> Choose CSV file
+          </Button>
+
+          <Button
+            variant="secondary"
+            onClick={onSample}
+            className="gap-1.5 border border-border/80 shadow-sm"
+          >
+            <Sparkles className="size-4 text-emerald-500" /> Try sample data
           </Button>
 
           <Dialog open={pasteOpen} onOpenChange={setPasteOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline">
+              <Button variant="outline" className="gap-1.5">
                 <ClipboardPaste className="size-4" /> Paste data
               </Button>
             </DialogTrigger>
@@ -113,7 +121,7 @@ export function DropZone({ onFiles, onText, onUrl, onSample, compact }: Props) {
 
           <Dialog open={urlOpen} onOpenChange={setUrlOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline">
+              <Button variant="outline" className="gap-1.5">
                 <Link2 className="size-4" /> From URL
               </Button>
             </DialogTrigger>
@@ -143,10 +151,6 @@ export function DropZone({ onFiles, onText, onUrl, onSample, compact }: Props) {
               </DialogFooter>
             </DialogContent>
           </Dialog>
-
-          <Button variant="ghost" onClick={onSample}>
-            <Sparkles className="size-4" /> Try an example
-          </Button>
         </div>
       </div>
     </div>
