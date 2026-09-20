@@ -527,7 +527,7 @@ export function CsvViewer() {
           value={options.delimiter}
           onValueChange={(v) => reparse({ delimiter: v as Delimiter })}
         >
-          <SelectTrigger size="sm" className="w-auto gap-1">
+          <SelectTrigger className="h-8 w-auto gap-1 text-xs">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -540,7 +540,7 @@ export function CsvViewer() {
         </Select>
 
         <Select value={options.encoding} onValueChange={(v) => reparse({ encoding: v })}>
-          <SelectTrigger size="sm" className="w-auto gap-1">
+          <SelectTrigger className="h-8 w-auto gap-1 text-xs">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

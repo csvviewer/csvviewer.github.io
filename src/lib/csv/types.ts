@@ -23,7 +23,7 @@ export type Sheet = {
   detectedDelimiter: string;
   errors: string[];
   bytes: number;
-  file?: File;
+  file?: File | undefined;
 };
 
 export type SortState = { column: number; dir: "asc" | "desc" } | null;

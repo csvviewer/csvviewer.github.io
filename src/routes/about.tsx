@@ -82,8 +82,8 @@ function AboutPage() {
           <div className="space-y-2">
             <h2 className="text-lg font-semibold text-foreground">Our Privacy Guarantee</h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Your files <strong className="text-foreground">never leave your computer</strong>.
-              All parsing, sorting, filtering, searching, and exporting happen entirely within your
+              Your files <strong className="text-foreground">never leave your computer</strong>. All
+              parsing, sorting, filtering, searching, and exporting happen entirely within your
               browser's JavaScript runtime.
             </p>
             <div className="grid gap-3 pt-3 sm:grid-cols-3">
@@ -123,7 +123,12 @@ function AboutPage() {
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
               Traditional web tables choke when rendering thousands of DOM elements. CSV Viewer uses
-              virtualized windowing (<code className="font-mono text-[11px] bg-muted px-1 rounded">@tanstack/react-virtual</code>) to only render rows currently in view, maintaining a smooth 60fps scrolling experience.
+              virtualized windowing (
+              <code className="font-mono text-[11px] bg-muted px-1 rounded">
+                @tanstack/react-virtual
+              </code>
+              ) to only render rows currently in view, maintaining a smooth 60fps scrolling
+              experience.
             </p>
           </div>
 
@@ -144,8 +149,9 @@ function AboutPage() {
               <span>Auto Delimiter & Multi-Encoding Support</span>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Automatically detects comma, semicolon, tab, or pipe delimiters. Switch between
-              UTF-8, Windows-1252, ISO-8859-1, UTF-16, and Shift-JIS without data corruption or garbled characters.
+              Automatically detects comma, semicolon, tab, or pipe delimiters. Switch between UTF-8,
+              Windows-1252, ISO-8859-1, UTF-16, and Shift-JIS without data corruption or garbled
+              characters.
             </p>
           </div>
 
