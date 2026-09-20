@@ -41,7 +41,7 @@ export function parseText(
   let rows: string[][];
 
   if (options.hasHeader && data.length > 0) {
-    columns = data[0].map((c, i) => (c.trim() === "" ? `Column ${i + 1}` : c.trim()));
+    columns = (data[0] ?? []).map((c, i) => (c.trim() === "" ? `Column ${i + 1}` : c.trim()));
     rows = data.slice(1);
   } else {
     const width = data.reduce((m, r) => Math.max(m, r.length), 0);
