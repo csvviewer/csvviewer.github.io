@@ -1,8 +1,6 @@
 # Simply CSV
 
-create a csvviewer for "csvviewer.github.io" domain: better than https://csv-viewer-online.github.io/
-
-This project was built with [Lovable](https://lovable.dev).
+Best csv viewer: https://csvviewer.github.io/
 
 ## Build with Lovable
 
