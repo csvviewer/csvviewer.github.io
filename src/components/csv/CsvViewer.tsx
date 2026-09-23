@@ -451,7 +451,7 @@ export function CsvViewer() {
           <input
             type="file"
             multiple
-            accept=".csv,.tsv,.txt,text/csv,text/plain"
+            accept=".csv,.tsv,.tab,.txt,.psv,text/csv,text/tab-separated-values,text/plain"
             className="hidden"
             onChange={(e) => {
               const files = Array.from(e.target.files ?? []);
@@ -715,14 +715,35 @@ export function CsvViewer() {
       {/* Global Window Drag Overlay */}
       {windowDragOver && (
         <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm">
-          <div className="flex flex-col items-center gap-3 rounded-2xl border-2 border-dashed border-primary bg-card/90 p-10 text-center shadow-2xl">
+          <div className="flex flex-col items-center gap-4 rounded-2xl border-2 border-dashed border-primary bg-card/95 p-10 text-center shadow-2xl">
             <div className="flex size-16 items-center justify-center rounded-full bg-primary/10 text-primary">
               <FileUp className="size-8 animate-bounce" />
             </div>
-            <p className="text-xl font-bold text-foreground">Drop CSV file to open</p>
-            <p className="text-sm text-muted-foreground">
-              Release anywhere on screen to load as a new tab
-            </p>
+            <div>
+              <p className="text-xl font-bold text-foreground">
+                Drop CSV, TSV, or tabular file to open
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Release anywhere on screen to load as a new tab
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1">
+              <span className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 font-mono text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+                .csv (,)
+              </span>
+              <span className="rounded-md border border-sky-500/30 bg-sky-500/10 px-2 py-0.5 font-mono text-xs font-semibold text-sky-700 dark:text-sky-300">
+                .tsv (⇥)
+              </span>
+              <span className="rounded-md border border-cyan-500/30 bg-cyan-500/10 px-2 py-0.5 font-mono text-xs font-semibold text-cyan-700 dark:text-cyan-300">
+                .tab (⇥)
+              </span>
+              <span className="rounded-md border border-violet-500/30 bg-violet-500/10 px-2 py-0.5 font-mono text-xs font-semibold text-violet-700 dark:text-violet-300">
+                .txt (;)
+              </span>
+              <span className="rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 font-mono text-xs font-semibold text-amber-700 dark:text-amber-300">
+                .psv (|)
+              </span>
+            </div>
           </div>
         </div>
       )}
